@@ -46,7 +46,7 @@ const Profile = () => {
           onChange={(e) => handleChange(e)}
         />
         <TextInput
-          label={"X (fka Twitter)"}
+          label={"X (aka Twitter)"}
           value={form.twitter}
           type={"link"}
           name={"twitter"}
@@ -54,7 +54,7 @@ const Profile = () => {
         />
 
         <TextInput
-          label={"Website"}
+          label={"Snapchat"}
           value={form.website}
           type={"text"}
           name={"website"}

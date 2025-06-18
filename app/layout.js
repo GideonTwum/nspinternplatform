@@ -31,6 +31,7 @@ export default function RootLayout({ children }) {
 
         
         <main className="relative z-10">{children}</main>
+        {/* <Footer/> */}
       </body>
     </html>
   );

@@ -1,34 +1,96 @@
-import Link from "next/link";
-import React from "react";
+"use client";
+
+import { useState } from "react";
 
 const Apply = () => {
-  return (
-    <div className="flex w-full flex-col items-start justify-start gap-8">
-      <div>
-        <div className="text-xl font-bold">Easy Apply</div>
-        <div className="text-base font-normal">
-          Choose an option to autocomplete your application. You can still fill
-          your profile manually.
-        </div>
-      </div>
+  const [formData, setFormData] = useState({
+    role: "",
+    date: "",
+    citizen:"",
+  });
 
-      <div className="flex h-40 w-full flex-row items-center justify-start gap-5">
-        <div className="flex h-24 w-full border-spacing-8 flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-[#D39660] bg-[#F1F1F1]">
-          <div>
-            <span className="text-blue-600 underline">Choose a file</span> or
-            drop it
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Submitted Data:", formData);
+  };
+
+  return (
+    <div className="flex w-full flex-col items-start justify-start gap-4">
+      <h1 className="text-xl font-bold mb-4">Application Form</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* === SELECT DROPDOWN START === */}
+        <div>
+          <label htmlFor="role" className="block mb-1 ">
+            Gender
+          </label>
+          <div className=" flex w-full flex row items-center justify-start gap-10">
+            <select
+              id="role"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="w-[1540px] border p-2 rounded h-10  border-gray-300 px-2"
+              required
+            >
+              <option value=""> Select gender </option>
+              <option value="loca">Female</option>
+              <option value="loca">Male</option>
+            </select>
           </div>
-          <div className="text-sm text-gray-500">10MB size limit</div>
         </div>
-        <div className="flex ">or</div>
-        <Link
-          target="_blank"
-          href={"https://www.indeed.com/"}
-          className="h-10 items-center justify-center text-nowrap rounded-full bg-[#266EEB] px-4 py-2 text-center text-white"
-        >
-          Apply with Indeed
-        </Link>
-      </div>
+        {/* === SELECT DROPDOWN END === */}
+
+        {/* === DATE INPUT START === */}
+        <div>
+          <label htmlFor="date" className="block mb-1">
+            Date of Birth
+          </label>
+          <input
+            type="date"
+            id="date"
+            name="date"
+            value={formData.date}
+            onChange={handleChange}
+            className="ww-[1520px] border p-2 rounded"
+            required
+          />
+        </div>
+        {/* === DATE INPUT END === */}
+
+        <div>
+          <label className="block mb-1">Are you a Ghanaian?</label>
+          <div className="flex w-full flex-col items-start justify-start gap-4">
+            <label className="justify-center items-center">
+              <input
+                type="radio"
+                name="citizen"
+                value="Yes"
+                checked={formData.citizen === "Yes"}
+                onChange={handleChange}
+                className="mr-2"
+              />
+              Yes
+            </label>
+
+            <label className="inline-flex items-center">
+              <input
+                type="radio"
+                name="citizen"
+                value="No"
+                checked={formData.workType === "onsite"}
+                onChange={handleChange}
+                className="mr-2"
+              />
+              No
+            </label>
+          </div>
+        </div>
+      </form>
     </div>
   );
 };
