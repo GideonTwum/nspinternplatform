@@ -1,10 +1,10 @@
 import Image from "next/image";
-import Splash from "./components/Splash";
+import Splash from "./components/splash/splash";
 
 export default function Home() {
   return (
-    <div className="min-h-screen">
-        <Splash />
+    <div>
+      <Splash />
     </div>
   );
 }
