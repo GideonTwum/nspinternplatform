@@ -1,10 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 const Uploads = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [error, setError] = useState("");
-  const [fileName, setFileName] = useState("");
+  const fileInputRef = useRef(null);
 
   const validExtensions = [
     "doc",
@@ -63,7 +63,8 @@ const Uploads = () => {
     "webp",
   ];
 
-  const maxSize = 10 * 1024 * 1024; // 10MB
+  const maxSize = 10 * 1024 * 1024; // 10MB per file
+  const maxFiles = 5;
 
   const isValidExtension = (filename) => {
     const ext = filename.split(".").pop().toLowerCase();
@@ -71,30 +72,39 @@ const Uploads = () => {
   };
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const newFiles = Array.from(e.target.files);
+    let validFiles = [];
+    let errors = [];
 
-    if (!isValidExtension(file.name)) {
-      setError("Unsupported file type.");
-      setFileName("");
-      return;
+    // Combine old + new files (but max 5)
+    const combinedFiles = [...selectedFiles, ...newFiles].slice(0, maxFiles);
+
+    combinedFiles.forEach((file) => {
+      if (!isValidExtension(file.name)) {
+        errors.push(`${file.name} is not a supported file type.`);
+      } else if (file.size > maxSize) {
+        errors.push(`${file.name} exceeds 10MB size limit.`);
+      } else {
+        validFiles.push(file);
+      }
+    });
+
+    if (errors.length) {
+      setError(errors.join(" "));
+    } else {
+      setSelectedFiles(validFiles);
+      setError("");
     }
-
-    if (file.size > maxSize) {
-      setError("File size exceeds 10MB limit.");
-      setFileName("");
-      return;
-    }
-
-    setSelectedFile(file);
-    setFileName(file.name);
-    setError("");
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file) handleFileChange({ target: { files: [file] } });
+    const files = e.dataTransfer.files;
+    handleFileChange({ target: { files } });
+  };
+
+  const openFileDialog = () => {
+    fileInputRef.current?.click();
   };
 
   return (
@@ -103,45 +113,60 @@ const Uploads = () => {
         <div className="text-lg whitespace-pre-line leading-relaxed">
           {`Upload required documents
               
-Name the attached files accordingly. (e.g. John Doe_CV, John Doe_Photo, John Doe_ID Card)
+              Name the attached files accordingly. (e.g. Kwesi Asare_CV, Kwesi Asare_Photo, Kwesi Asare
+              -Ghana Card)
 
-(1) Latest copy of your CV (required)
-(2) Scanned copy of valid ID Card (required)
-(3) Scanned copy of internship letter (required)
-
-Click on ADD ATTACHMENT below and attach the required documents.`}
+              (1) Latest copy of your CV (required)
+              (2) Scanned copy of valid Ghana Card (required)
+              (3) Scanned copy of internship letter (required).`}
+          {/* Click on{" "}
+          <span
+            className="text-blue-600 underline cursor-pointer"
+            onClick={openFileDialog}
+          >
+            ADD ATTACHMENT
+          </span>{" "}
+          below and attach the required documents */}
         </div>
       </div>
 
       <div className="flex w-full flex-col items-start justify-start gap-5">
         <div
-          className="flex h-30 w-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-[#D39660] bg-[#F1F1F1] p-5 cursor-pointer"
+          className="flex h-44 w-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-[#D39660] bg-[#F1F1F1] p-5 cursor-pointer"
           onDrop={handleDrop}
           onDragOver={(e) => e.preventDefault()}
+          onClick={openFileDialog}
         >
-          <label htmlFor="file-upload" className="text-blue-600 underline">
-            Choose a file
-          </label>{" "}
-          or drop it
+          <div>
+            <span className="text-blue-600 underline">Choose a file</span> or
+            drop it
+          </div>
           <input
             type="file"
             id="file-upload"
+            ref={fileInputRef}
             className="hidden"
             onChange={handleFileChange}
+            multiple
             accept={validExtensions.map((ext) => "." + ext).join(",")}
           />
-          <div className="text-sm">10MB size limit</div>
+          <div className="text-sm">Up to 5 files, 10MB each</div>
           <div className="text-sm text-gray-500">
-            Supported files: DOC, DOT, RMR, RSM, RESUME, OXPS, PDF, P7S, AI,
-            RTF, PAGES, GDOC, GSLIDES, XLS, XLSM, PUB, MSG, PPT, WPS, ODS, ODT,
-            PPTX, PPSX, XLSX, DOCX, DOTX, SXW, WPD, ABW, MP3, M4A, WAV, PSD,
-            EML, ICAL, ICS, IFB, ICALENDAR, ICS_RESPONSE, CSV, TXT, TEXT, VCF,
-            MP4, MOV, BMP, GIF, JFIF, JPEG, JPG, PNG, TIF, TIFF, WEBP
+            Supported files: {validExtensions.join(", ").toUpperCase()}
           </div>
-          {fileName && (
-            <div className="text-sm text-green-600">Selected: {fileName}</div>
+
+          {selectedFiles.length > 0 && (
+            <div className="text-sm text-green-600 text-left w-full mt-2">
+              <strong>Selected Files:</strong>
+              <ul className="list-disc list-inside">
+                {selectedFiles.map((file, index) => (
+                  <li key={index}>{file.name}</li>
+                ))}
+              </ul>
+            </div>
           )}
-          {error && <div className="text-sm text-red-500">{error}</div>}
+
+          {error && <div className="text-sm text-red-500 mt-2">{error}</div>}
         </div>
 
         <div className="flex items-start space-x-2">
