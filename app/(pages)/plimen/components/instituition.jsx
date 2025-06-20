@@ -19,13 +19,13 @@ const Instituition = () => {
       <label htmlFor="city" className="block mb-1">
         Select your tertiary institution *
       </label>
-      <div className="w-full">
+      <div className="relative flex w-full flex-col gap-2.5">
         <select
           id="instituite"
           name="instituite"
           value={form.instituite}
           onChange={handleChange}
-          className="w-full border border-gray-300 rounded h-10 px-3 py-2"
+          className="flex justify-start w-full border border-gray-300 rounded h-10 px-3 py-2"
           required
         >
           <option value="">Select Instituition</option>

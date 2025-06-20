@@ -37,9 +37,9 @@ const Apply = () => {
               className="w-[1540px] border p-2 rounded h-10  border-gray-300 px-2"
               required
             >
-              <option value=""> Select gender </option>
-              <option value="loca">Female</option>
-              <option value="loca">Male</option>
+              <option value=""disabled> Select gender </option>
+              <option value="female">Female</option>
+              <option value="male">Male</option>
             </select>
           </div>
         </div>
@@ -82,7 +82,7 @@ const Apply = () => {
                 type="radio"
                 name="citizen"
                 value="No"
-                checked={formData.workType === "onsite"}
+                checked={formData.citizen === "No"}
                 onChange={handleChange}
                 className="mr-2"
               />
