@@ -7,7 +7,10 @@ const Splash = () => {
     window.location.href="/form"
   };
   return (
-    <div className="flex flex-col items-center justify-center h-screen ">
+    <div className="flex flex-col items-center  h-screen ">
+      <div className="h-[70vh] bg-[dodgerblue] flex items-center justify-center w-full image">
+        <h1>spaces</h1>
+      </div>
       <button
         className="flex items-center justify-center p-4 bg-[#2D8FA5] hover:bg-gray-700 text-white rounded-lg"
         onClick={() => handleClick()}

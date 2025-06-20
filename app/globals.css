@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+.image{
+    background: linear-gradient(to bottom,rgba(18,20,65,0.5), #4EB0C7), url('/images/internss.jpg') ;
+    background-size: cover;
+    background-position: center; 
+    background-repeat: no-repeat;
+}
