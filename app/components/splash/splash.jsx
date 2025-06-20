@@ -15,7 +15,7 @@ const Splash = () => {
         className="flex items-center justify-center p-4 bg-[#2D8FA5] hover:bg-gray-700 text-white rounded-lg"
         onClick={() => handleClick()}
       >
-        Apply Now
+        Apply Now here 
       </button>
     </div>
   );
